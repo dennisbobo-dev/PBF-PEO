@@ -13,6 +13,6 @@ class Handler(BaseHTTPRequestHandler):
   if urlsplit(self.path).path not in ('/','/health'):
    self.send_error(404);return
   payload=(HTML if urlsplit(self.path).path=='/' else 'ok').encode()
-  self.send_response(200);self.send_header('Content-Type','text/html; charset=utf-8' if self.path=='/' else 'text/plain');self.send_header('Content-Length',str(len(payload)));self.send_header('Cache-Control','no-store');self.send_header('X-Content-Type-Options','nosniff');self.send_header('X-Frame-Options','DENY');self.send_header('Referrer-Policy','no-referrer');self.send_header('Content-Security-Policy',"default-src 'self' 'unsafe-inline'; form-action 'none'; frame-ancestors 'none'");self.end_headers();self.wfile.write(payload)
+  self.send_response(200);self.send_header('Content-Type','text/html; charset=utf-8' if urlsplit(self.path).path=='/' else 'text/plain; charset=utf-8');self.send_header('Content-Length',str(len(payload)));self.send_header('Cache-Control','no-store');self.send_header('X-Content-Type-Options','nosniff');self.send_header('X-Frame-Options','DENY');self.send_header('Referrer-Policy','no-referrer');self.send_header('Content-Security-Policy',"default-src 'self' 'unsafe-inline'; form-action 'none'; frame-ancestors 'none'");self.end_headers();self.wfile.write(payload)
  def do_POST(self):self.send_error(403,'Submission is disabled in preview')
 ThreadingHTTPServer(('0.0.0.0',int(os.getenv('PORT','8000'))),Handler).serve_forever()
